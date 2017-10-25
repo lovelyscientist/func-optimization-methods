@@ -2,13 +2,14 @@ import dichotomy_method
 import golden_section_method
 import fibonacci_method
 import plots
+import math
 
 
-def goal_function(x): return x**4 #return x**4-4*x**2-4*x+1
+def goal_function(x): return x**4-4*x**2-4*x+1
 epsilon = 0.00001
 delta = epsilon/1000
-a = -5
-b = 5
+a = -10
+b = 10
 n = 100
 
 x_min_dichotomy = dichotomy_method.calculate(goal_function, a, b, epsilon, delta)
