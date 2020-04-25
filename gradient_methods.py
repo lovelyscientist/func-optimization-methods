@@ -27,7 +27,7 @@ STARTING_Y = -10
 
 RANGE_START = -10
 RANGE_END = 10
-STEP_SIZE = 0.02 # Скорость обучения
+STEP_SIZE = 0.02
 delta = EPSILON/1000
 X = np.array([i for i in np.linspace(RANGE_START, RANGE_END, 1000)])
 Y = np.array([i for i in np.linspace(RANGE_START, RANGE_END, 1000)])
@@ -118,39 +118,35 @@ def gradient_smaller_step(previous_x, previous_y, step_size):
         print(str([current_x, current_y]) + " <----- gradient descent")
         return [current_x, current_y]
 
+def plot():
+    xlist = np.linspace(RANGE_START, RANGE_END, 1000)
+    ylist = np.linspace(RANGE_START, RANGE_END, 1000)
+    X, Y = np.meshgrid(xlist, ylist)
+    Z = func(X, Y)
+    plt.figure()
+    cp_nc = plt.contour(X, Y, Z, colours="black")
+    plt.clabel(cp_nc, inline=True, fontsize=8)
+    cp = plt.contourf(X, Y, Z, cmap='jet', alpha=0.5)
+    plt.colorbar(cp)
+    plt.title('Gradient Methods')
+    plt.xlabel('X')
+    plt.ylabel('Y')
 
-def classical_method():
-    print('to be continued')
+    colors_rec = ['green', 'blue', 'red']
+    proxy = [plt.Rectangle((0, 0), 1, 1, fc=colors_rec[i]) for i in range(0, 3)]
+    plt.legend(proxy, ["fastest descent", "newtone method", "gradient smaller step"])
 
+    gradient_smaller_step(STARTING_X, STARTING_Y, STEP_SIZE)
+    newtone_method(STARTING_X, STARTING_Y)
+    fastest_descent(STARTING_X,STARTING_Y)
 
-xlist = np.linspace(RANGE_START, RANGE_END, 1000)
-ylist = np.linspace(RANGE_START, RANGE_END, 1000)
-X, Y = np.meshgrid(xlist, ylist)
-Z = func(X, Y)
-plt.figure()
-cp_nc = plt.contour(X, Y, Z, colours="black")
-plt.clabel(cp_nc, inline=True, fontsize=8)
-cp = plt.contourf(X, Y, Z, cmap='jet', alpha=0.5)
-plt.colorbar(cp)
-plt.title('Gradient Methods')
-plt.xlabel('X')
-plt.ylabel('Y')
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
 
-colors_rec = ['green', 'blue', 'red']
-proxy = [plt.Rectangle((0, 0), 1, 1, fc=colors_rec[i]) for i in range(0, 3)]
-plt.legend(proxy, ["fastest descent", "newtone method", "gradient smaller step"])
+    for artist in D3_arrows_artists:
+        ax.add_artist(artist)
 
-classical_method()
-gradient_smaller_step(STARTING_X, STARTING_Y, STEP_SIZE)
-newtone_method(STARTING_X, STARTING_Y)
-fastest_descent(STARTING_X,STARTING_Y)
-
-fig = plt.figure()
-ax = fig.gca(projection='3d')
-for artist in D3_arrows_artists:
-    ax.add_artist(artist)
-
-surf = ax.plot_surface(X, Y, Z, cmap='jet', alpha=0.5, linewidth=0)
-plt.colorbar(surf)
-plt.legend(proxy, ["fastest descent", "newtone method", "gradient smaller step"])
-plt.show()
+    surf = ax.plot_surface(X, Y, Z, cmap='jet', alpha=0.5, linewidth=0)
+    plt.colorbar(surf)
+    plt.legend(proxy, ["fastest descent", "newtone method", "gradient smaller step"])
+    plt.show()
